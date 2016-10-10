@@ -1,0 +1,24 @@
+procedure  guess
+begin
+	a := 10;
+	if ( a != 11 ) then
+		a := a * 2;
+	else
+		a := 12 + a;
+	endif;
+end;
+
+procedure if2
+begin
+a := 10;
+b := 12;
+c := 14;
+if ( a != b)  then
+	if ( a = c )  then
+		a := b;
+	endif;
+else
+	a := c;
+	b := 2*c;
+endif;
+end;

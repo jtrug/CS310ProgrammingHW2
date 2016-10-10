@@ -117,6 +117,7 @@ public class Parser {
 		{
 			return false;
 		}
+		token = ls.lex();
 		if (!Bool())
 		{
 			return false;
@@ -136,12 +137,19 @@ public class Parser {
 		{
 			return false;
 		}
-		// there can be more else keywords then StatementLists here...
-		token = ls.lex();
-		while (token == Arrays.asList(ls.keywords).indexOf("else"))
+		// there can be more else if's here
+		while (token == Arrays.asList(ls.keywords).indexOf("elseif"))
 		{
 			token = ls.lex();
 			if (!StatementList());
+			{
+				return false;
+			}
+		}
+		if (token == Arrays.asList(ls.keywords).indexOf("else"))
+		{
+			token = ls.lex();
+			if (!StatementList())
 			{
 				return false;
 			}
@@ -154,7 +162,7 @@ public class Parser {
 		if (token != Arrays.asList(ls.keywords).indexOf(";"))
 		{
 			return false;
-		}		
+		}
 		return true;
 	}
 	public boolean Expr()
