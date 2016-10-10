@@ -5,99 +5,116 @@ import java.util.Scanner;
 
 public class LexScanner {
 
-	final private String[] keywords = {"endif","then","else","if","end","begin","procedue", "integer", "variable",")", "(", "!=","=","/","*","-","+"};
+	final public String[] keywords = {"endif","then","else","if","end","begin","procedure", "integer", "variable",")", "(", "!=","=","/","*","-","+",";",":="};
 	private String current;
 	private Scanner s;
+	private String buffer = "";
+	private int location = 0;
 	public LexScanner(File f) throws FileNotFoundException {
 		current = "";
 		s = new Scanner(f);
+		s.useDelimiter("");
+		while(s.hasNext()){
+			buffer=buffer+s.next();
+		}
 	}
 	public int lex(){
-		char c = s.next(".").charAt(0);
-		if(c==' '||c=='\n'){
-			lex();
+		boolean variable = false;
+		boolean integer = false;
+		current = "";
+		char c =buffer.charAt(location);
+		if(Character.isWhitespace(c)){
+			while(Character.isWhitespace(c)){
+				location++;
+				c=buffer.charAt(location);
+			}
 		}
-		else if(c=='('){
+		if(c=='('){
+			location++;
 			current = ""+c;
-			return Arrays.asList(keywords).indexOf('(');
 		}
 		else if(c==')'){
+			location++;
 			current = ""+c;
-			return Arrays.asList(keywords).indexOf(')');
 		}
 		else if(c=='='){
+			location++;
 			current = ""+c;
-			return Arrays.asList(keywords).indexOf('=');
 		}
 		else if(c=='!'){
-			if(s.next(".").charAt(0)=='='){
+			location++;
+			if(buffer.charAt(location)=='='){
 				current = "!=";
-				return Arrays.asList(keywords).indexOf("!=");
+				location++;
 			}
 		}
 		else if(c=='/'){
+			location++;
 			current = ""+c;
-			return Arrays.asList(keywords).indexOf('/');
 		}
 		else if(c=='+'){
+			location++;
 			current = ""+c;
-			return Arrays.asList(keywords).indexOf('+');
 		}
 		else if(c=='-'){
+			location++;
 			current = ""+c;
-			return Arrays.asList(keywords).indexOf('-');
 		}
 		else if(c=='*'){
+			location++;
 			current = ""+c;
-			return Arrays.asList(keywords).indexOf('*');
 		}
 		else if(c==';'){
+			location++;
 			current = ""+c;
-			return Arrays.asList(keywords).indexOf(';');
 		}
 		else if(c==':'){
-			if(s.next(".").charAt(0)=='='){	
+			location++;
+			if(buffer.charAt(location)=='='){	
+				location++;
 				current = ":=";
-				return Arrays.asList(keywords).indexOf(":=");
 			}
 		}
 		else if(current.isEmpty() && Character.isDigit(c)){
-			Scanner s2 = new Scanner(System.in);
+			integer = true;
 			while(Character.isDigit(c)){
 				current = current +c;
-				s2 = s;
-				c = s.next(".").charAt(0);
+				location++;
+				c = buffer.charAt(location);
 			}
-			s=s2;
-			return Arrays.asList(keywords).indexOf("integer");
 		}
 		else if(Character.isAlphabetic(c)){
-			current = current+ c;
-			c = s.next(".").charAt(0);
-			Scanner s4 = new Scanner(System.in);
+			
 			while(Character.isLetterOrDigit(c)){
 				current = current +c;
+				int next = location +1;
+				//System.out.println(current);
 				for(int i =0;i<7;i++){
-					Scanner s3 = new Scanner(System.in);
-					s3 = s;
-					if(keywords[i].equals(current) && !Character.isLetterOrDigit(s.next(".").charAt(0))){
-						s = s3;
+					
+					if(keywords[i].compareTo(current)==0 && !Character.isLetterOrDigit(buffer.charAt(next))){
+						location++;
 						return i;
 					}
 				}
-				s4 = s;
-				c = s.next(".").charAt(0);
+				location++;
+				c = buffer.charAt(location);
 			}
-			s = s4;
-			return Arrays.asList(keywords).indexOf("variable"); 
+			variable = true;
 		}
-		return -1;
+		if(variable){
+			return Arrays.asList(keywords).indexOf("variable");
+		}
+		if(integer){
+			return Arrays.asList(keywords).indexOf("integer");
+		}
+		return Arrays.asList(keywords).indexOf(current);
+		
 	}
 	public String getCurrentToken() {
 		return current;
 	}
 
 	public boolean endOfFile() {
-		return s.hasNext(".");
+		return location == buffer.length();
 	}
 }
