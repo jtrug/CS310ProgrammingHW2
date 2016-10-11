@@ -11,14 +11,20 @@ public class Parser {
 			ls = new LexScanner(filename);
 		} catch (FileNotFoundException e) 
 		{
-			System.out.println("File not found.");
-			e.printStackTrace();
+			System.out.println("File not found.\n");
 		}
 	}
 	
 	public boolean Program()
 	{
-		token = ls.lex();
+		try 
+		{
+			token = ls.lex();
+		}
+		catch (StringIndexOutOfBoundsException e)
+		{
+			return ls.endOfFile();
+		}
 		if (token != Arrays.asList(ls.keywords).indexOf("procedure"))
 		{
 			System.out.println("You are missing procedure");
@@ -51,6 +57,10 @@ public class Parser {
 		{
 			System.out.println("You are missing ;");
 			return false;
+		}
+		if (!ls.endOfFile())
+		{
+			return Program();
 		}
 		return true;
 	}

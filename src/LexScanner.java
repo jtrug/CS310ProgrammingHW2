@@ -115,6 +115,6 @@ public class LexScanner {
 	}
 
 	public boolean endOfFile() {
-		return location == buffer.length();
+		return location >= buffer.length();
 	}
 }
