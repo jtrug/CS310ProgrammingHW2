@@ -23,6 +23,9 @@ public class LexScanner {
 		boolean integer = false;
 		current = "";
 		char c =buffer.charAt(location);
+		if(location>=buffer.length()){
+			return -1;
+		}
 		if(Character.isWhitespace(c)){
 			while(Character.isWhitespace(c)){
 				location++;
@@ -88,16 +91,20 @@ public class LexScanner {
 			while(Character.isLetterOrDigit(c)){
 				current = current +c;
 				int next = location +1;
-				//System.out.println(current);
 				for(int i =0;i<7;i++){
 					
-					if(keywords[i].compareTo(current)==0 && !Character.isLetterOrDigit(buffer.charAt(next))){
+					if(keywords[i].compareTo(current)==0 && next < buffer.length() &&!Character.isLetterOrDigit(buffer.charAt(next))){
 						location++;
 						return i;
 					}
 				}
-				location++;
-				c = buffer.charAt(location);
+				if( location < buffer.length()-1){
+					location++;
+					c = buffer.charAt(location);
+				}
+				else{
+					c=' ';
+				}
 			}
 			variable = true;
 		}

@@ -17,7 +17,8 @@ public class Parser {
 	
 	public boolean Program()
 	{
-		try 
+		
+		try
 		{
 			token = ls.lex();
 		}
@@ -27,19 +28,16 @@ public class Parser {
 		}
 		if (token != Arrays.asList(ls.keywords).indexOf("procedure"))
 		{
-			System.out.println("You are missing procedure");
 			return false;
 		}
 		token=ls.lex();
 		if (token != Arrays.asList(ls.keywords).indexOf("variable"))
 		{
-			System.out.println("You are missing variable");
 			return false;
 		}
 		token = ls.lex();
 		if (token != Arrays.asList(ls.keywords).indexOf("begin"))
 		{
-			System.out.println("You are missing begin");
 			return false;
 		}
 		token = ls.lex();
@@ -49,13 +47,11 @@ public class Parser {
 		}
 		if (token != Arrays.asList(ls.keywords).indexOf("end"))
 		{
-			System.out.println("You are missing end");
 			return false;
 		}
 		token = ls.lex();
 		if (token != Arrays.asList(ls.keywords).indexOf(";"))
 		{
-			System.out.println("You are missing ;");
 			return false;
 		}
 		if (!ls.endOfFile())
@@ -110,7 +106,6 @@ public class Parser {
 		token = ls.lex();
 		if (!Expr())
 		{
-			System.out.println("You are missing expr");
 			return false;
 		}
 		return true;
@@ -179,7 +174,6 @@ public class Parser {
 	{
 		if (!Term())
 		{
-			System.out.println("You are missing term");
 			return false;
 		}
 		token = ls.lex();
@@ -201,7 +195,6 @@ public class Parser {
 	{
 		if (!(Var() || Int()))
 		{
-			System.out.println("You are missing term "+Int());
 			return false;
 		}
 		return true;
@@ -222,7 +215,6 @@ public class Parser {
 	}
 	public boolean Var()
 	{
-		//System.out.println("You are missing var");
 		return (token == Arrays.asList(ls.keywords).indexOf("variable"));
 	}
 	public boolean Int()
