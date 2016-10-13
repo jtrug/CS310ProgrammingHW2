@@ -1,3 +1,10 @@
+/*
+ *Jared Bartrug
+ *Nick Trefz
+ *Programming Assignment 2
+ *10/13/16 
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -23,10 +30,10 @@ public class LexScanner {
 		boolean integer = false;
 		current = "";
 		char c =buffer.charAt(location);
-		if(location>=buffer.length()){
+		if(location>=buffer.length()){ // Check to make sure the location is not out of bounds
 			return -1;
 		}
-		if(Character.isWhitespace(c)){
+		if(Character.isWhitespace(c)){ //Check space or tab or new line
 			while(Character.isWhitespace(c)){
 				location++;
 				c=buffer.charAt(location);
@@ -78,7 +85,7 @@ public class LexScanner {
 				current = ":=";
 			}
 		}
-		else if(current.isEmpty() && Character.isDigit(c)){
+		else if(current.isEmpty() && Character.isDigit(c)){ // Check for digit and keep taking in digits until it runs out
 			integer = true;
 			while(Character.isDigit(c)){
 				current = current +c;
@@ -86,7 +93,7 @@ public class LexScanner {
 				c = buffer.charAt(location);
 			}
 		}
-		else if(Character.isAlphabetic(c)){
+		else if(Character.isAlphabetic(c)){ // Check for first letter and keep taking in digits or letter until it runs out
 			
 			while(Character.isLetterOrDigit(c)){
 				current = current +c;
@@ -117,11 +124,11 @@ public class LexScanner {
 		return Arrays.asList(keywords).indexOf(current);
 		
 	}
-	public String getCurrentToken() {
+	public String getCurrentToken() { //Gets current token
 		return current;
 	}
 
-	public boolean endOfFile() {
+	public boolean endOfFile() { //Checks for end of file
 		return location >= buffer.length();
 	}
 }
